@@ -1,6 +1,8 @@
 package com.project.githubusers.rest
 
 import com.project.githubusers.model.ResponseModel
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,10 +15,16 @@ interface ApiInterface {
     fun searchUsers(@Query("q")query : String,@Query("page")currentPage:Int) : Call<ResponseModel>
 
     companion object {
+
         val instance: ApiInterface by lazy {
             val retrofit = Retrofit.Builder()
                 .baseUrl("https://api.github.com/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(
+                    OkHttpClient.Builder()
+                        .addInterceptor(HttpLoggingInterceptor().also{it.level = HttpLoggingInterceptor.Level.BODY})
+                        .build()
+                )
                 .build()
             retrofit.create(ApiInterface::class.java)
         }

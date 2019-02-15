@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private val mAdapter by lazy { ResultsAdapter(mList, this) }
     private val mPresenter by lazy {MainPresenter(this)}
     private var currentPage = 1
-    private var isNeedQuery = true
+    private var isNeedMoreQuery = true
     private var isLoading = false
     private var latestQuery = ""
 
@@ -47,12 +47,15 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         toast(if (isShow)"Loading" else "Finish")
     }
 
-    override fun onDataResult(list: List<UserModel>) {
-        if (list.isEmpty() && mList.isEmpty()) toast("No Results Found")
+    override fun onDataResult(list: List<UserModel>, totalResult : Int) {
+        if (list.isEmpty() && mList.isEmpty()) {
+            isNeedMoreQuery = false
+            toast("No Results Found")
+        }
         else {
-            val lastPos = mList.size -1
+            if (mList.size >= totalResult-30) isNeedMoreQuery = false
             mList.addAll(list)
-            mAdapter.notifyItemRangeInserted(lastPos,list.size)
+            mAdapter.notifyDataSetChanged()
             currentPage++
         }
     }
@@ -62,6 +65,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private val onButtonClick = View.OnClickListener {
         val currentQuery = userQuery.text.toString()
         if (latestQuery == currentQuery || currentQuery.isEmpty()) return@OnClickListener
+        isNeedMoreQuery = true
         latestQuery = currentQuery
         mList.clear()
         currentPage=1
@@ -69,7 +73,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
 
     private fun searchUserName(){
-        mPresenter.searchUserName(latestQuery,currentPage)
+        if (isNeedMoreQuery){
+            mPresenter.searchUserName(latestQuery,currentPage)
+        }
     }
 
 

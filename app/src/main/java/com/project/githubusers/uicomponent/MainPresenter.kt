@@ -18,7 +18,8 @@ class MainPresenter (private val mView : MainContract.View) : MainContract.Prese
             override fun onResponse(call: Call<ResponseModel>, response: Response<ResponseModel>) {
                 if (response.code() == 200){
                     val items = response.body()?.items.orEmpty()
-                    mView.onDataResult(items)
+                    val totalCount = response.body()?.total_Count ?: 0
+                    mView.onDataResult(items, totalCount)
                 }
                 mView.showLoading(false)
             }

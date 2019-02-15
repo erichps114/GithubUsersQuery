@@ -5,7 +5,7 @@ import com.project.githubusers.model.UserModel
 interface MainContract {
     interface View{
         fun showLoading(isShow : Boolean)
-        fun onDataResult (list : List<UserModel>)
+        fun onDataResult (list : List<UserModel>, totalResult : Int)
     }
 
     interface Presenter {
