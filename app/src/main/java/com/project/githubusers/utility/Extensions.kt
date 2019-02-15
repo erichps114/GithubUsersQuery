@@ -17,11 +17,12 @@ fun RecyclerView.attachLoadMore(onLoadMore : () -> Unit, currentList : List<Any>
             super.onScrolled(recyclerView, dx, dy)
             if (layoutManager !is LinearLayoutManager) throw IllegalArgumentException("Bro, mohon maap nih! Cuma bisa LinearLayoutManager doang")
             val lastVisibleItem = (layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+
             if (lastVisibleItem >= currentList.size - 3  && !isLoadMore){
                 isLoadMore = true
                 Log.i("ERICH", " Load more")
                 onLoadMore()
-            } else {
+            } else if (lastVisibleItem < currentList.size - 3){
                 isLoadMore = false
             }
         }
