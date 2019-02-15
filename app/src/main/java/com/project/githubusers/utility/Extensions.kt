@@ -1,6 +1,7 @@
 package com.project.githubusers.utility
 
 import android.content.Context
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -10,7 +11,7 @@ fun Context.toast(message : String){
     Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
 }
 
-fun RecyclerView.attachLoadMore(onLoadMore : () -> Unit, currentList : List<Any>){
+fun RecyclerView.attachLoadMore(currentList : List<Any>, onLoadMore : () -> Unit){
     this.addOnScrollListener(object : RecyclerView.OnScrollListener(){
         var isLoadMore = false
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

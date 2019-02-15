@@ -15,40 +15,86 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:elevation="4dp"
             android:background="@color/colorPrimary"
-            android:id="@+id/toolbar"/>
+            android:id="@+id/toolbar">
 
-    <EditText
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:id="@+id/userQuery"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="49dp"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            android:inputType="text"
-            android:hint="Search for..."/>
+            android:orientation="horizontal">
 
-    <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/userQuery"/>
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/home_icon"/>
+
+            <android.support.v7.widget.SearchView
+                    android:id="@+id/searchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:iconifiedByDefault="false"
+                    app:queryHint="@string/search_hint"
+                    android:gravity="start"/>
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.Toolbar>
+
+
     <android.support.v7.widget.RecyclerView
             android:id="@+id/recylerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="16dp"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            android:layout_margin="16dp"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+    <LinearLayout
+            android:id="@+id/error_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="16dp">
+
+            <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:src="@drawable/search_big"
+                    android:alpha="0.2"/>
+            <TextView
+                    android:layout_marginTop="25dp"
+                    android:id="@+id/error_message"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#CDCDCD"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:textSize="24dp"
+                    android:text="GitHub"/>
+
+    </LinearLayout>
+
+    <com.github.ybq.android.spinkit.SpinKitView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/loadingView"
+            app:SpinKit_Color="@color/colorAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            style="@style/SpinKitView.ChasingDots"/>
 
 
 </android.support.constraint.ConstraintLayout>

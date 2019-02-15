@@ -12,14 +12,17 @@ class MainPresenter (private val mView : MainContract.View) : MainContract.Prese
         val callAPI = ApiInterface.instance.searchUsers(query,currentPage)
         callAPI.enqueue(object : Callback<ResponseModel>{
             override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
-                //TODO : Error
+                mView.errorToast("No Connection")
+                mView.showLoading(false)
             }
 
             override fun onResponse(call: Call<ResponseModel>, response: Response<ResponseModel>) {
                 if (response.code() == 200){
                     val items = response.body()?.items.orEmpty()
-                    val totalCount = response.body()?.total_Count ?: 0
+                    val totalCount = response.body()?.total_count ?: 0
                     mView.onDataResult(items, totalCount)
+                } else if (response.code() == 300){
+                    mView.errorToast("Limit exceed. Please wait a little bit")
                 }
                 mView.showLoading(false)
             }

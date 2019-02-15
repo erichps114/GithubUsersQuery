@@ -6,6 +6,7 @@ interface MainContract {
     interface View{
         fun showLoading(isShow : Boolean)
         fun onDataResult (list : List<UserModel>, totalResult : Int)
+        fun errorToast(message : String)
     }
 
     interface Presenter {

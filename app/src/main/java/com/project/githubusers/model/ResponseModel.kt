@@ -7,6 +7,6 @@ class ResponseModel{
     var items : List<UserModel> = mutableListOf()
 
     @Expose
-    var total_Count = 0
+    var total_count = 0
 
 }
