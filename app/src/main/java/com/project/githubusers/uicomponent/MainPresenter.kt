@@ -21,7 +21,7 @@ class MainPresenter (private val mView : MainContract.View) : MainContract.Prese
                     val items = response.body()?.items.orEmpty()
                     val totalCount = response.body()?.total_count ?: 0
                     mView.onDataResult(items, totalCount)
-                } else if (response.code() == 300){
+                } else if (response.code() == 403){
                     mView.errorToast("Limit exceed. Please wait a little bit")
                 }
                 mView.showLoading(false)

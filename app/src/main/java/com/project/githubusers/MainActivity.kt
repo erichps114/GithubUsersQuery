@@ -1,13 +1,10 @@
 package com.project.githubusers
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.util.Log
 import android.view.View
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.project.githubusers.model.UserModel
 import com.project.githubusers.uicomponent.MainContract
 import com.project.githubusers.uicomponent.MainPresenter
@@ -23,7 +20,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private val mPresenter by lazy {MainPresenter(this)}
     private var currentPage = 1
     private var isNeedMoreQuery = true
-    private var isLoading = false
     private var latestQuery = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +34,28 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 Log.d("ERICH","Load more triggered")
                 searchUserName()
             }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putSerializable("LIST",ArrayList<UserModel>(mList))
+        outState?.putInt("CURRENT_PAGE",currentPage)
+        outState?.putBoolean("IS_NEED_MORE_QUERY",isNeedMoreQuery)
+        outState?.putString("LATEST_QUERY",latestQuery)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        if (savedInstanceState != null){
+            mList.addAll     (savedInstanceState.getSerializable("LIST") as ArrayList<UserModel>)
+            currentPage     = savedInstanceState.getInt("CURRENT_PAGE")
+            isNeedMoreQuery = savedInstanceState.getBoolean("IS_NEED_MORE_QUERY")
+            latestQuery     = savedInstanceState.getString("LATEST_QUERY")
+
+            if (mList.isNotEmpty()) hideErrorMessage()
+            mAdapter.notifyDataSetChanged()
+
         }
     }
 
@@ -74,7 +92,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
 
     override fun showLoading(isShow : Boolean) {
-        isLoading = isShow
         if (isShow) loadingView.visibility = View.VISIBLE
         else loadingView.visibility = View.GONE
     }
@@ -95,7 +112,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
     }
 
-    override fun errorToast(message: String) = toast(message)
+    override fun errorToast(message: String) {
+        toast(message)
+        if (mList.isEmpty()) showErrorMessage(message)
+    }
 
     private fun showErrorMessage(message : String){
         recylerView.visibility = View.GONE
